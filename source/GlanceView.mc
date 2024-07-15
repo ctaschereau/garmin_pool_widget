@@ -18,7 +18,7 @@ class GlanceView extends Ui.View {
     }
 
     function onShow() {
-        var url = "https://pool.ctasc.site/data/pool";                         // set the url
+        var url = process.env.URL;                         // set the url
 
         var params = {                                              // set the parameters
             "rangeToDisplay" => "24hours"
