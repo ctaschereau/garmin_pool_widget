@@ -1,6 +1,6 @@
 <layouts>
   <layout id="MainView">
-    <bitmap id="id_monkey" x="left" y="center" filename="../drawables/pool_icon_white.png" />
+    <bitmap id="pool_icon_white_small" x="20" y="center" filename="../drawables/pool_icon_white_small.png" />
     <label id="labelTemperature" x="center" y="center" />
   </layout>
 </layouts>
