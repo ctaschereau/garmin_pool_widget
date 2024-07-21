@@ -4,8 +4,11 @@ import Toybox.Lang;
 import Toybox.Graphics;
 import Toybox.WatchUi;
 using Toybox.PersistedContent;
+using Toybox.Time;
+using Toybox.Time.Gregorian;
 
 var responseText;
+var dateString;
 
 class MainView extends Ui.View {
 
@@ -15,6 +18,7 @@ class MainView extends Ui.View {
 
     function onLayout(dc as Dc) as Void {
         responseText = Rez.Strings.Loading;
+        dateString = "";
         setLayout(Rez.Layouts.MainView(dc));
     }
 
@@ -26,6 +30,10 @@ class MainView extends Ui.View {
             return;
         }
 
+        callServerForTemperature();
+    }
+
+    function callServerForTemperature() {
         var url = "https://pool.ctasc.site/data/pool";
         var params = {
             "rangeToDisplay" => "24hours"
@@ -44,6 +52,8 @@ class MainView extends Ui.View {
     function onUpdate(dc) {
         var labelTemperature = View.findDrawableById("labelTemperature") as Ui.Text;
         labelTemperature.setText(responseText);
+        var date = View.findDrawableById("date") as Ui.Text;
+        date.setText(dateString);
         View.onUpdate(dc);
     }
 
@@ -52,6 +62,20 @@ class MainView extends Ui.View {
             // data is an array, so grab the first element's "temp" property
             var latestData = (data as Array<Dictionary>)[data.size() - 1];
             var tempAsNumber = latestData["temp"] as Number;
+            var ms = latestData["dateInMs"] as Number;
+            var myTime = new Time.Moment(ms / 1000);
+            var today = Gregorian.info(myTime, Time.FORMAT_MEDIUM);
+            dateString = Lang.format(
+                "$1$:$2$, $3$ $4$",
+                [
+                    today.hour,
+                    today.min.format("%02d"),
+                    today.day,
+                    today.month
+                ]
+            );
+            // System.println(dateString); // e.g. "16:28 1 Mar"
+            // System.println("Temp now : " + tempAsNumber + " at " + now.toString());
             var tempAsString = tempAsNumber.format("%2.1f");
             // System.println("Temp now : " + tempAsString);
             responseText = tempAsString + "°C";
