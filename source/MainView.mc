@@ -7,8 +7,9 @@ using Toybox.PersistedContent;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
 
-var responseText;
-var dateString;
+var lastDayData as Array<Dictionary>?;
+var responseText as String?;
+var dateString as String?;
 
 class MainView extends Ui.View {
 
@@ -17,7 +18,7 @@ class MainView extends Ui.View {
     }
 
     function onLayout(dc as Dc) as Void {
-        responseText = Rez.Strings.Loading;
+        responseText = Rez.Strings.Loading as String;
         dateString = "";
         setLayout(Rez.Layouts.MainView(dc));
     }
@@ -26,7 +27,7 @@ class MainView extends Ui.View {
     function onShow() {
         // Check if watch has internet access first
         if (!System.getDeviceSettings().connectionAvailable) {
-            responseText = Rez.Strings.NoInternet;
+            responseText = Rez.Strings.NoInternet as String;
             return;
         }
 
@@ -59,6 +60,7 @@ class MainView extends Ui.View {
 
     function onReceive(responseCode as Number, data as Null or Dictionary or String or PersistedContent.Iterator) as Void {
         if (responseCode == 200 && data instanceof Array) {
+            lastDayData = data as Array<Dictionary>;
             // data is an array, so grab the first element's "temp" property
             var latestData = (data as Array<Dictionary>)[data.size() - 1];
             var tempAsNumber = latestData["temp"] as Number;

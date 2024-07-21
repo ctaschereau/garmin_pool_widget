@@ -3,12 +3,20 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 
 class App extends Application.AppBase {
+
+    private var _mainView as MainView?;
+    private var _secondView as GraphView?;
+    private var _views as Array<WatchUi.View>?;
+
     function initialize() {
         AppBase.initialize();
     }
 
     function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [ new MainView() ];
+        _mainView = new MainView();
+        _secondView = new GraphView();
+        _views = [_mainView, _secondView];
+        return [_views[0], new MyWidgetDelegate(_views)];
     }
 
     (:glance)
