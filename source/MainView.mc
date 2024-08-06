@@ -4,6 +4,7 @@ import Toybox.Lang;
 import Toybox.Graphics;
 import Toybox.WatchUi;
 using Toybox.PersistedContent;
+using Toybox.Timer;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
 
@@ -12,6 +13,7 @@ var responseText as String?;
 var dateString as String?;
 
 class MainView extends Ui.View {
+    var myTimer as Timer.Timer?;
 
     function initialize() {
         Ui.View.initialize();
@@ -32,9 +34,15 @@ class MainView extends Ui.View {
         }
 
         callServerForTemperature();
+
+
+        if (myTimer == null) {
+            myTimer = new Timer.Timer();
+            myTimer.start(method(:callServerForTemperature), 1800000, true); // 1800000 milliseconds = 30 minutes
+        }
     }
 
-    function callServerForTemperature() {
+    function callServerForTemperature() as Void {
         var url = "https://pool.ctasc.site/data/pool";
         var params = {
             "rangeToDisplay" => "24hours"
@@ -54,7 +62,7 @@ class MainView extends Ui.View {
         var labelTemperature = View.findDrawableById("labelTemperature") as Ui.Text;
         labelTemperature.setText(responseText);
         var date = View.findDrawableById("date") as Ui.Text;
-        date.setText(dateString);
+        date.setText("@" + dateString);
         View.onUpdate(dc);
     }
 
@@ -66,12 +74,12 @@ class MainView extends Ui.View {
             var tempAsNumber = latestData["temp"] as Number;
             var ms = latestData["dateInMs"] as Number;
             var myTime = new Time.Moment(ms / 1000);
-            var today = Gregorian.info(myTime, Time.FORMAT_MEDIUM);
+            var myGregorianInfo = Gregorian.info(myTime, Time.FORMAT_MEDIUM);
             dateString = Lang.format(
                 "$1$:$2$",
                 [
-                    today.hour,
-                    today.min.format("%02d")
+                    myGregorianInfo.hour,
+                    myGregorianInfo.min.format("%02d")
                 ]
             );
             // System.println(dateString); // e.g. "16:28 1 Mar"
