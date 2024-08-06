@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName" scope="glance">Pool temperature</string>
+    <string id="AppName" scope="glance">POOL</string>
     <string id="Loading">Loading...</string>
     <string id="NoInternet">No internet!</string>
     <string id="Error">Error</string>

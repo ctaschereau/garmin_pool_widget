@@ -68,12 +68,10 @@ class MainView extends Ui.View {
             var myTime = new Time.Moment(ms / 1000);
             var today = Gregorian.info(myTime, Time.FORMAT_MEDIUM);
             dateString = Lang.format(
-                "$1$:$2$, $3$ $4$",
+                "$1$:$2$",
                 [
                     today.hour,
-                    today.min.format("%02d"),
-                    today.day,
-                    today.month
+                    today.min.format("%02d")
                 ]
             );
             // System.println(dateString); // e.g. "16:28 1 Mar"
@@ -81,6 +79,7 @@ class MainView extends Ui.View {
             var tempAsString = tempAsNumber.format("%2.1f");
             // System.println("Temp now : " + tempAsString);
             responseText = tempAsString + "°C";
+            lastGoodReadText = responseText + " @ " + dateString;
         } else {
             responseText = Rez.Strings.Error + " : " + responseCode;
         }

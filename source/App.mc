@@ -16,7 +16,7 @@ class App extends Application.AppBase {
         _mainView = new MainView();
         _secondView = new GraphView();
         _views = [_mainView, _secondView];
-        return [_views[0], new MyWidgetDelegate(_views)];
+        return [_views[0], new WidgetDelegate(_views)];
     }
 
     (:glance)
