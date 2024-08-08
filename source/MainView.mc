@@ -7,6 +7,7 @@ using Toybox.PersistedContent;
 using Toybox.Timer;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
+using Toybox.Application.Storage;
 
 // Global variable in order to be able to access it in the GraphView
 var lastDayData as Array<Dictionary>?;
@@ -41,6 +42,7 @@ class MainView extends Ui.View {
     function callServerForTemperature() as Void {
         lastDayData = null;
         timerCount++;
+
         var url = "https://pool.ctasc.site/data/pool";
         var params = {
             "rangeToDisplay" => "24hours"
@@ -99,7 +101,8 @@ class MainView extends Ui.View {
     }
 
     function setGlanceViewTempString(tempAsString as String, mostRecentTempReadDateString as String) as Void {
-        lastGoodReadText = tempAsString + " @ " + mostRecentTempReadDateString;
+        var lastGoodReadText = tempAsString + " @ " + mostRecentTempReadDateString;
+        Storage.setValue("lastGoodReadText", lastGoodReadText);
     }
 
     function getPoolReadDateString() as String {

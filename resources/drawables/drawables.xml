@@ -1,4 +1,3 @@
 <drawables>
-    <bitmap id="LauncherIcon" filename="pool_icon.png" />
-    <bitmap id="LauncherIconOld" filename="launcher_icon.png" />
+    <bitmap id="LauncherIcon" filename="pool_icon_white.png" />
 </drawables>
