@@ -21,7 +21,7 @@ class GraphView extends Ui.View {
         // Using this, plot a chart of the temperature over the last 24 hours in the above rectangle.
 
         // Process and plot the data
-        if (lastDayData.size() > 0) {
+        if (lastDayData != null && lastDayData.size() > 0) {
             var minTemp = 100000; // Initialize with a very high number
             var maxTemp = -100000; // Initialize with a very low number
             var now = Time.now().value();
