@@ -13,7 +13,7 @@ var responseText as String?;
 var dateString as String?;
 
 class MainView extends Ui.View {
-    var myTimer as Timer.Timer?;
+    // var myTimer as Timer.Timer?;
 
     function initialize() {
         Ui.View.initialize();
@@ -35,15 +35,16 @@ class MainView extends Ui.View {
 
         callServerForTemperature();
 
-
+        /*
         if (myTimer == null) {
             myTimer = new Timer.Timer();
             myTimer.start(method(:callServerForTemperature), 1800000, true); // 1800000 milliseconds = 30 minutes
         }
+        */
     }
 
     function callServerForTemperature() as Void {
-        var url = "https://pool.ctasc.site/data/pool";
+        var url = "https://pool.capy.motorcycles/data/pool";
         var params = {
             "rangeToDisplay" => "24hours"
         };
