@@ -1,7 +1,7 @@
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
-
-var lastGoodReadText = "24C @ 11:25";
+import Toybox.Lang;
+using Toybox.Application.Storage;
 
 (:glance)
 class GlanceView extends Ui.GlanceView {
@@ -10,11 +10,19 @@ class GlanceView extends Ui.GlanceView {
         Ui.GlanceView.initialize();
     }
 
+    function onShow() {
+        WatchUi.requestUpdate();
+    }
+
     function onUpdate(dc) {
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-    	dc.drawRectangle(0, 0, dc.getWidth(), dc.getHeight());
+    	// dc.drawRectangle(0, 0, dc.getWidth(), dc.getHeight());
         var label = Application.loadResource( Rez.Strings.AppName );
-        dc.drawText(0, 0, Gfx.FONT_GLANCE, label, Gfx.TEXT_JUSTIFY_LEFT);
-        dc.drawText(0, 20, Gfx.FONT_SYSTEM_XTINY, lastGoodReadText, Gfx.TEXT_JUSTIFY_LEFT);
+
+        var lastGoodReadText = Storage.getValue("lastGoodReadText");
+        if (lastGoodReadText != null) {
+            label += '\n' + lastGoodReadText;
+        }
+        dc.drawText(0, dc.getHeight() / 2, Gfx.FONT_GLANCE, label, Gfx.TEXT_JUSTIFY_LEFT | Gfx.TEXT_JUSTIFY_VCENTER);
     }
 }

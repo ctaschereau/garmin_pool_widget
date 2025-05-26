@@ -2,6 +2,7 @@
   <layout id="MainView">
     <bitmap id="pool_icon_white_small" x="20" y="center" filename="../drawables/pool_icon_white_small.png" />
     <label id="labelTemperature" x="center" y="center" />
+    <label id="labelError" x="center" y="center" font="Gfx.FONT_TINY" />
     <label id="date" x="20%" y="80%" font="Gfx.FONT_TINY" />
   </layout>
 </layouts>

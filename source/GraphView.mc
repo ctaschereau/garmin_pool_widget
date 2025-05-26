@@ -17,18 +17,18 @@ class GraphView extends Ui.View {
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_BLACK);
         dc.drawRectangle(42, 80, CHART_WIDTH, CHART_HEIGHT);
 
-        // lastDayData is an array of dictionaries. Each of them conatains both a "dateInMs" and a "temp" key.
+        // lastDayData is an array of dictionaries. Each of them contains both a "dateInMs" and a "temp" key.
         // Using this, plot a chart of the temperature over the last 24 hours in the above rectangle.
 
         // Process and plot the data
-        if (lastDayData.size() > 0) {
+        if (lastDayData != null && lastDayData.size() > 0) {
             var minTemp = 100000; // Initialize with a very high number
             var maxTemp = -100000; // Initialize with a very low number
             var now = Time.now().value();
             var twentyFourHoursAgo = now - 24 * 60 * 60;
 
             // Find min and max temperatures
-            for (var i = 0; i < lastDayData.size(); i++) {
+            for (var i = 0; i < lastDayData.size(); i+=3) {
                 var temp = lastDayData[i]["temp"] as Number;
                 if (temp < minTemp) { minTemp = temp; }
                 if (temp > maxTemp) { maxTemp = temp; }
@@ -39,7 +39,7 @@ class GraphView extends Ui.View {
             // Plot the data points
             var prevX = 0;
             var prevY = 0;
-            for (var i = 0; i < lastDayData.size(); i++) {
+            for (var i = 0; i < lastDayData.size(); i+=3) {
                 var dateInSeconds = (lastDayData[i]["dateInMs"] as Number) / 1000;
                 var temp = lastDayData[i]["temp"] as Number;
 
