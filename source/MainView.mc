@@ -18,7 +18,7 @@ class MainView extends Ui.View {
     var mostRecentPoolReadTemp as Number?;
 
     var timerCount = 0;
-    // var myTimer as Timer.Timer?;
+    var myTimer as Timer.Timer?;
 
     function initialize() {
         Ui.View.initialize();
