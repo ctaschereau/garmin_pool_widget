@@ -18,7 +18,7 @@ class MainView extends Ui.View {
     var mostRecentPoolReadTemp as Number?;
 
     var timerCount = 0;
-    // var myTimer as Timer.Timer?;
+    var myTimer as Timer.Timer?;
 
     function initialize() {
         Ui.View.initialize();
@@ -29,8 +29,12 @@ class MainView extends Ui.View {
     }
 
     function onShow() {
+        var deviceSettings = System.getDeviceSettings();
+        
         // Check if watch has internet access first
-        if (!System.getDeviceSettings().connectionAvailable) {
+        if (!deviceSettings.connectionAvailable) {
+            // Still trigger UI update to show error message
+            WatchUi.requestUpdate();
             return;
         }
 
@@ -72,8 +76,17 @@ class MainView extends Ui.View {
         var responseText;
         var labelError = View.findDrawableById("labelError") as Ui.Text;
         var labelTemperature = View.findDrawableById("labelTemperature") as Ui.Text;
-        if (!System.getDeviceSettings().connectionAvailable) {
-            responseText = Rez.Strings.NoInternet as String;
+        
+        var deviceSettings = System.getDeviceSettings();
+        
+        if (!deviceSettings.connectionAvailable) {
+            // Check if phone is connected
+            if (deviceSettings.phoneConnected != null && !deviceSettings.phoneConnected) {
+                responseText = Rez.Strings.NoPhoneConnection as String;
+            } else {
+                responseText = Rez.Strings.NoInternet as String;
+            }
+            labelTemperature.setText(responseText);
             labelTemperature.setVisible(true);
             labelError.setVisible(false);
         } else if (lastResponseCode == null) {
@@ -91,8 +104,19 @@ class MainView extends Ui.View {
             labelTemperature.setVisible(true);
             labelError.setVisible(false);
         } else {
-            responseText = WatchUi.loadResource(Rez.Strings.Error)  + " : " + lastResponseCode;
-            labelError.setText(responseText);
+            // Handle specific HTTP error codes
+            var errorText;
+            if (lastResponseCode >= 400 && lastResponseCode < 500) {
+                errorText = WatchUi.loadResource(Rez.Strings.Error) + " : " + lastResponseCode;
+            } else if (lastResponseCode >= 500) {
+                errorText = WatchUi.loadResource(Rez.Strings.Error) + " : " + lastResponseCode;
+            } else if (lastResponseCode == -1 || lastResponseCode == 0) {
+                // Network timeout or connection error
+                errorText = WatchUi.loadResource(Rez.Strings.ConnectionError);
+            } else {
+                errorText = WatchUi.loadResource(Rez.Strings.Error) + " : " + lastResponseCode;
+            }
+            labelError.setText(errorText);
             labelTemperature.setVisible(false);
             labelError.setVisible(true);
         }
@@ -103,6 +127,8 @@ class MainView extends Ui.View {
     function setGlanceViewTempString(tempAsString as String, mostRecentTempReadDateString as String) as Void {
         var lastGoodReadText = tempAsString + " @ " + mostRecentTempReadDateString;
         Storage.setValue("lastGoodReadText", lastGoodReadText);
+        // Store the timestamp separately so glance view can check if it's from today
+        Storage.setValue("lastGoodReadTimestamp", mostRecentPoolReadMoment.value());
     }
 
     function getPoolReadDateString() as String {

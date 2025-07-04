@@ -2,5 +2,7 @@
     <string id="AppName" scope="glance">POOL</string>
     <string id="Loading">Loading...</string>
     <string id="NoInternet">No internet!</string>
+    <string id="NoPhoneConnection">No phone connection!</string>
+    <string id="ConnectionError">Connection error!</string>
     <string id="Error">Error</string>
 </strings>

@@ -2,5 +2,7 @@
     <string id="AppName" scope="glance">PISCINE</string>
     <string id="Loading">Chargement...</string>
     <string id="NoInternet">Aucune connexion</string>
+    <string id="NoPhoneConnection">Téléphone non connecté!</string>
+    <string id="ConnectionError">Erreur de connexion!</string>
     <string id="Error">Erreur</string>
 </strings>
